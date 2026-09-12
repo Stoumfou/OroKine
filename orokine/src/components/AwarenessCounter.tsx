@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrainCircuit } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 

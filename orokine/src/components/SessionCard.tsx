@@ -1,4 +1,3 @@
-import React from 'react';
 import { Play, CheckCircle2, Clock, Lock } from 'lucide-react';
 
 interface SessionCardProps {

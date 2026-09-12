@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, Check, Volume2, VolumeX, Camera } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { SESSION_1, SESSION_2 } from '../data/sessions';
-import type { Session, Exercise } from '../data/sessions';
+import type { Exercise } from '../data/sessions';
 import { audioEngine } from '../utils/audio';
 import { ExerciseIllustration } from './ExerciseIllustration';
 import Confetti from 'react-confetti';
@@ -12,14 +12,14 @@ type PlayerState = 'PREP' | 'COUNTDOWN' | 'EXERCISE' | 'FINISHED';
 
 interface Props {
   onClose: () => void;
-  sessionIndex: 1 | 2;
+  sessionIndex: number;
 }
 
 export function SessionPlayer({ onClose, sessionIndex }: Props) {
   const [playerState, setPlayerState] = useState<PlayerState>('PREP');
   const [currentExIndex, setCurrentExIndex] = useState(0);
   const [countdown, setCountdown] = useState(3);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused] = useState(false);
   const [showMirror, setShowMirror] = useState(false);
   
   const { settings, completeSession } = useAppStore();
@@ -31,7 +31,7 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
   // Timer state
   const [timeLeft, setTimeLeft] = useState(0);
   const endTimeRef = useRef<number>(0);
-  const rAFRef = useRef<number>();
+  const rAFRef = useRef<number | undefined>(undefined);
 
   const currentEx = sessionData.exercises[currentExIndex];
 
