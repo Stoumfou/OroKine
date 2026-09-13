@@ -8,7 +8,7 @@ import { ExerciseIllustration } from './ExerciseIllustration';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 
-type PlayerState = 'PREP' | 'COUNTDOWN' | 'EXERCISE' | 'FINISHED';
+type PlayerState = 'PREP' | 'COUNTDOWN' | 'EXERCISE' | 'REST' | 'FINISHED';
 
 interface Props {
   onClose: () => void;
@@ -18,6 +18,7 @@ interface Props {
 export function SessionPlayer({ onClose, sessionIndex }: Props) {
   const [playerState, setPlayerState] = useState<PlayerState>('PREP');
   const [currentExIndex, setCurrentExIndex] = useState(0);
+  const [currentSet, setCurrentSet] = useState(1);
   const [countdown, setCountdown] = useState(3);
   const [isPaused] = useState(false);
   const [showMirror, setShowMirror] = useState(false);
@@ -52,6 +53,7 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
   }, []);
 
   const transitionToExercise = (index: number) => {
+    setCurrentSet(1);
     const ex = sessionData.exercises[index];
     if (ex.type === 'timer') {
       setCountdown(3);
@@ -88,7 +90,7 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [playerState, currentExIndex]); // added currentExIndex to deps just in case
+  }, [playerState, currentExIndex]);
 
   const startExercise = (ex: Exercise) => {
     if (ex.type === 'timer' && ex.duration) {
@@ -106,12 +108,53 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
         if (remaining > 0) {
           rAFRef.current = requestAnimationFrame(updateTimer);
         } else {
-          handleNext();
+          finishCurrentSetOrExercise();
         }
       };
       
       rAFRef.current = requestAnimationFrame(updateTimer);
     }
+  };
+
+  const finishCurrentSetOrExercise = () => {
+    if (rAFRef.current) cancelAnimationFrame(rAFRef.current);
+    
+    if (currentEx.sets && currentSet < currentEx.sets) {
+       if (settings.soundEnabled) audioEngine.playStartBeep();
+       setCurrentSet(prev => prev + 1);
+       
+       if (currentEx.pauseBetweenSets) {
+          setPlayerState('REST');
+          const durationMs = currentEx.pauseBetweenSets * 1000;
+          setTimeLeft(durationMs);
+          endTimeRef.current = Date.now() + durationMs;
+          
+          const updateRest = () => {
+             const now = Date.now();
+             const remaining = Math.max(0, endTimeRef.current - now);
+             setTimeLeft(remaining);
+             if (remaining > 0) {
+                rAFRef.current = requestAnimationFrame(updateRest);
+             } else {
+                setPlayerState('EXERCISE');
+                if (settings.soundEnabled) audioEngine.playStartBeep();
+                startExercise(currentEx);
+             }
+          }
+          rAFRef.current = requestAnimationFrame(updateRest);
+       } else {
+          startExercise(currentEx);
+       }
+    } else {
+       handleNext();
+    }
+  };
+
+  const skipRest = () => {
+    if (rAFRef.current) cancelAnimationFrame(rAFRef.current);
+    setPlayerState('EXERCISE');
+    if (settings.soundEnabled) audioEngine.playStartBeep();
+    startExercise(currentEx);
   };
 
   const handleNext = () => {
@@ -131,7 +174,7 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
 
   if (playerState === 'PREP') {
     return (
-      <div className="flex-1 flex flex-col bg-slate-50 p-6 pt-12 h-screen overflow-y-auto">
+      <div className="flex-1 flex flex-col bg-slate-50 p-6 pt-12 h-[100dvh] overflow-y-auto">
         <button onClick={onClose} className="absolute top-6 left-6 p-2 bg-white rounded-full shadow-sm">
           <X className="w-5 h-5 text-slate-500" />
         </button>
@@ -170,7 +213,7 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
   
   if (playerState === 'FINISHED') {
     return (
-      <div className="flex-1 flex flex-col bg-slate-50 h-screen p-6 overflow-y-auto relative">
+      <div className="flex-1 flex flex-col bg-slate-50 h-[100dvh] p-6 overflow-y-auto relative">
         <Confetti
           width={width}
           height={height}
@@ -225,9 +268,41 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
     );
   }
 
+  if (playerState === 'REST') {
+    return (
+      <div className="flex-1 flex flex-col h-[100dvh] bg-slate-50">
+        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+          <div className="w-40 h-40 bg-sky-100 rounded-full flex items-center justify-center mb-8 relative">
+            <svg className="absolute inset-0 w-full h-full -rotate-90">
+              <circle cx="80" cy="80" r="76" fill="none" stroke="#e0f2fe" strokeWidth="8" />
+              <circle 
+                cx="80" cy="80" r="76" fill="none" stroke="#38bdf8" strokeWidth="8" 
+                strokeDasharray="477" 
+                strokeDashoffset={477 * (1 - timeLeft / ((currentEx.pauseBetweenSets || 10) * 1000))} 
+                strokeLinecap="round" 
+                className="transition-all duration-100 ease-linear"
+              />
+            </svg>
+            <span className="text-5xl font-bold text-sky-500">{Math.ceil(timeLeft / 1000)}</span>
+          </div>
+          <h2 className="text-3xl font-bold text-slate-800 mb-2">Repos</h2>
+          <p className="text-slate-500 text-lg mb-12">
+            Série {currentSet} à suivre...
+          </p>
+          <button 
+            onClick={skipRest}
+            className="bg-white border-2 border-slate-200 text-slate-600 font-bold py-4 px-12 rounded-2xl active:scale-95 transition-all"
+          >
+            Passer le repos
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   // EXERCISE STATE
   return (
-    <div className="flex-1 flex flex-col h-screen bg-slate-50">
+    <div className="flex-1 flex flex-col h-[100dvh] bg-slate-50">
       <header className="flex justify-between items-center p-6 pt-safe">
         <button onClick={onClose} className="p-2 bg-white rounded-full shadow-sm">
           <X className="w-5 h-5 text-slate-500" />
@@ -242,9 +317,16 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
       
       <main className="flex-1 flex flex-col items-center p-6 text-center">
         <h2 className="text-2xl font-bold text-slate-800 mb-1">{currentEx.title}</h2>
-        <span className="text-sky-500 font-medium text-sm mb-8">{currentEx.category}</span>
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-sky-500 font-medium text-sm">{currentEx.category}</span>
+          {currentEx.sets && (
+            <span className="bg-slate-200 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-md">
+              Série {currentSet}/{currentEx.sets}
+            </span>
+          )}
+        </div>
         
-        <div className="w-64 h-64 bg-white rounded-full shadow-lg border-8 border-slate-50 flex items-center justify-center mb-8 relative overflow-hidden">
+        <div className="w-32 h-32 bg-white rounded-full shadow-lg border-4 border-slate-50 flex items-center justify-center mb-4 relative overflow-hidden">
           {showMirror ? (
             <video 
               autoPlay 
@@ -265,20 +347,20 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
           
           {playerState === 'COUNTDOWN' ? (
             <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-full z-20">
-              <span className="text-6xl font-bold text-sky-500 animate-pulse">{countdown}</span>
+              <span className="text-4xl font-bold text-sky-500 animate-pulse">{countdown}</span>
             </div>
           ) : currentEx.type === 'timer' && !showMirror && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-              <span className="text-5xl font-bold text-slate-800 drop-shadow-sm">{Math.ceil(timeLeft / 1000)}</span>
+              <span className="text-3xl font-bold text-slate-800 drop-shadow-sm">{Math.ceil(timeLeft / 1000)}</span>
             </div>
           )}
 
           {/* Toggle Mirror Button */}
           <button 
             onClick={() => setShowMirror(!showMirror)}
-            className="absolute bottom-2 right-2 p-3 bg-white rounded-full shadow-md hover:bg-slate-50"
+            className="absolute bottom-1 right-1 p-2 bg-white rounded-full shadow-md hover:bg-slate-50"
           >
-            <Camera className={`w-5 h-5 ${showMirror ? 'text-sky-500' : 'text-slate-400'}`} />
+            <Camera className={`w-4 h-4 ${showMirror ? 'text-sky-500' : 'text-slate-400'}`} />
           </button>
         </div>
 
@@ -314,7 +396,7 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
             
             {currentEx.type === 'reps' ? (
               <button 
-                onClick={handleNext}
+                onClick={finishCurrentSetOrExercise}
                 disabled={playerState === 'COUNTDOWN'}
                 className="flex-[2] bg-emerald-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-emerald-500/30 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100"
               >

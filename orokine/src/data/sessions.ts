@@ -28,40 +28,27 @@ export const SESSION_1: Session = {
   exercises: [
     {
       id: 's1-e1',
-      title: '1. Déglutition (Liquide)',
-      category: 'Déglutition',
+      title: '1. Déglutition',
+      category: 'Mouvement de toboggan',
       type: 'reps',
       reps: 10,
       instructions: [
         'Le point de départ de la langue est au palais.',
         'Elle s\'aplatit contre le palais pour amener le liquide vers l\'arrière (mouvement de toboggan).',
         'Prenez de petites à moyennes gorgées (10 fois).',
-        'À faire devant un miroir : sans bouger les lèvres et sans que la langue ne touche les dents.'
+        'À faire devant un miroir : sans bouger les lèvres et sans que la langue ne touche les dents.',
+        'Ensuite, placez le bâtonnet entre les dents et avalez votre salive 5 fois de suite sans refermer les lèvres.'
       ],
       mirrorRecommended: true,
-    },
-    {
-      id: 's1-e2',
-      title: '2. Déglutition (Bâtonnet)',
-      category: 'Déglutition',
-      type: 'reps',
-      reps: 5,
-      equipment: ['bâtonnet'],
-      instructions: [
-        'Placez le bâtonnet entre les dents.',
-        'Avalez votre salive 5 fois de suite.',
-        'Ne refermez pas les lèvres pendant la déglutition.'
-      ],
-      mirrorRecommended: true,
+      equipment: ['bâtonnet', 'verre d\'eau']
     },
     {
       id: 's1-e3',
-      title: '3. Mobilité de la langue',
-      category: 'Mobilité',
+      title: '2. Mobilité de la langue',
+      category: 'Bouger la langue dans tous les sens',
       type: 'reps',
       reps: 5,
       instructions: [
-        'Bougez la langue dans tous les sens.',
         'Le Singe : passez la langue sous les lèvres (5 allers-retours en haut, 5 en bas).',
         'Dents : passez la pointe de la langue sur chaque dent (5 allers-retours).',
         'Extérieur : mouvements à l\'extérieur de la bouche (5 allers-retours haut/bas, 5 gauche/droite).'
@@ -70,84 +57,98 @@ export const SESSION_1: Session = {
     },
     {
       id: 's1-e4a',
-      title: '4a. Mobilité arrière langue',
-      category: 'Phonation',
-      type: 'reps',
-      reps: 20,
-      instructions: [
-        'Prononcez "GA" 20 fois, la bouche grande ouverte, selon vos possibilités.',
-        'Maintenez la mâchoire abaissée et immobile (placez une main sur le menton pour vous aider).'
-      ],
-      mirrorRecommended: true,
-    },
-    {
-      id: 's1-e4b',
-      title: '4b. Placage arrière langue',
-      category: 'Respiration',
+      title: '3. Mobilité et Placage',
+      category: 'Arrière de la langue',
       type: 'timer',
       duration: 15,
       sets: 4,
       pauseBetweenSets: 5,
       instructions: [
-        'Maintenez l\'arrière de la langue collée au palais.',
+        'Prononcez "GA" 20 fois, la bouche grande ouverte. Maintenez la mâchoire abaissée.',
+        'Puis, maintenez l\'arrière de la langue collée au palais.',
         'Respirez exclusivement par le nez.',
         'Gardez cette position 15 secondes, à faire 4 fois.'
       ],
+      mirrorRecommended: true,
     },
     {
       id: 's1-e5',
-      title: '5. Claquage',
+      title: '4. Claquage',
       category: 'Phonation',
       type: 'reps',
-      reps: 20,
+      reps: 60,
       instructions: [
-        'La langue fait un mouvement d\'enroulement en partant du palais vers l\'arrière. Articulez bien en baissant la mâchoire.',
-        'Faites le son "CLA" (20 fois), "CLO" (20 fois), puis "CLA-CLO" (20 fois).',
-        'Si c\'est difficile : faites-le dents serrées, pour que la langue tape en bas. Dès que possible, passez au double claquage ("CLAC-CLA", "CLO-CLO").'
+        'CLA 20 fois',
+        'CLO 20 fois',
+        'CLA-CLO 20 fois',
+        'Dès que possible, passer au double claquage : son "CLAC-CLA-CLO-CLO" x 20.',
+        '(Si exercice difficile, serrez les dents et répétez "CLA CLA CLA")'
       ],
     },
     {
       id: 's1-e6',
-      title: '6. Le Piston',
+      title: '5. Le Piston',
       category: 'Renforcement',
       type: 'timer',
       duration: 10,
       sets: 10,
       pauseBetweenSets: 5,
       instructions: [
-        'Appuyez fort la pointe de la langue au niveau des bosses du palais.',
-        'Gardez les dents serrées.',
-        'Mettez un doigt sous le menton pour sentir l\'appui et appliquez une forte résistance.',
-        'Maintenez 10 secondes (10 séries).'
+        'Poussez la pointe de la langue très fort contre la papille (juste derrière les incisives).',
+        'Placez un doigt sous le menton pour résister à la force de la langue.',
+        'Maintenez la pression 10 secondes.',
+        'Faites 10 séries de 10 secondes.'
       ],
     },
     {
       id: 's1-e7',
-      title: '7. Étirement du frein',
-      category: 'Assouplissement',
+      title: '6. Étirement du frein',
+      category: 'Étirement',
       type: 'timer',
       duration: 60,
       sets: 2,
-      pauseBetweenSets: 10,
-      equipment: ['bâtonnet ou index'],
+      pauseBetweenSets: 15,
+      equipment: ['bâtonnet'],
       instructions: [
-        'Tirez la langue par-dessus l\'index ou le bâtonnet, placé sur les dents du bas.',
-        'Maintenez la position d\'étirement pendant 1 minute.',
-        'Faites cet exercice 2 fois.'
+        'La bouche est grande ouverte.',
+        'Le bâtonnet ou l\'index est posé sur les incisives inférieures.',
+        'Tirez la langue au maximum par-dessus, vers le bas.',
+        'Maintenez l\'étirement 1 minute, 2 fois.'
       ],
     },
     {
-      id: 's1-e8',
-      title: '8. Détente musculaire',
-      category: 'Relaxation',
-      type: 'timer',
-      duration: 60,
-      sets: 1,
+      id: 's1-e8a',
+      title: '7a. Détente - Pressions',
+      category: 'Massages',
+      type: 'reps',
+      reps: 10,
       instructions: [
-        'Massage extra-buccal des masséters (de la pommette à l\'angle de la mâchoire).',
-        'Faites 10 pressions glissées (en haut et en bas) bilatéralement, des paumes jusqu\'aux doigts.',
-        'Massez circulairement (2x10 mouvements).',
-        'Maintenez une pression 30s sur les points douloureux (d\'abord en ouverture statique, puis dynamique).'
+        'Massez les muscles masséters (muscles des joues/mâchoire).',
+        'Faites des pressions glissées (10 fois).'
+      ],
+    },
+    {
+      id: 's1-e8b',
+      title: '7b. Détente - Ponçage',
+      category: 'Massages',
+      type: 'reps',
+      reps: 10,
+      sets: 2,
+      pauseBetweenSets: 5,
+      instructions: [
+        'Faites un ponçage avec les poings.',
+        'Effectuez des mouvements circulaires (2 séries de 10).'
+      ],
+    },
+    {
+      id: 's1-e8c',
+      title: '7c. Détente - Points douloureux',
+      category: 'Massages',
+      type: 'timer',
+      duration: 30,
+      instructions: [
+        'Cherchez les points particulièrement douloureux.',
+        'Maintenez une pression ferme de 30 secondes sur ces points.'
       ],
     }
   ]
