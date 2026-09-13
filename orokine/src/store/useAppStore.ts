@@ -7,19 +7,19 @@ export interface AppState {
   awarenessHistory: { date: string; count: number }[];
   streak: number;
   lastActiveDate: string | null;
-  completedSessions: { id: string; date: string; type: string }[];
+  completedSessions: { id: string; date: string; type: string; evaluation?: { pain: number; difficulty: number } }[];
   currentSessionIndex: 1 | 2;
   sessionProgress: number; // 1 to 6
   settings: {
     soundEnabled: boolean;
-    transitionDelay: number;
-    mirrorEnabled: boolean;
+    vibrationEnabled: boolean;
+    voiceCoachEnabled: boolean;
   };
   
   // Actions
   incrementAwareness: () => void;
   checkDailyReset: () => void;
-  completeSession: (type: string) => void;
+  completeSession: (type: string, evaluation?: { pain: number; difficulty: number }) => void;
   updateSettings: (settings: Partial<AppState['settings']>) => void;
 }
 
@@ -45,8 +45,8 @@ export const useAppStore = create<AppState>()(
       sessionProgress: 1,
       settings: {
         soundEnabled: true,
-        transitionDelay: 5,
-        mirrorEnabled: true,
+        vibrationEnabled: true,
+        voiceCoachEnabled: true,
       },
 
       incrementAwareness: () => {
@@ -79,10 +79,29 @@ export const useAppStore = create<AppState>()(
         }
       },
 
-      completeSession: (type) => {
+      completeSession: (type, evaluation) => {
         const today = getTodayString();
         set((state) => {
-          const newCompleted = [...state.completedSessions, { id: crypto.randomUUID(), date: today, type }];
+          // If we completed 7 sessions of type 'session-1', unlock 'session-2'
+          const session1Count = state.completedSessions.filter(s => s.type === 'session-1').length + 1;
+          let nextProgress = state.sessionProgress;
+          let nextIndex = state.currentSessionIndex;
+          
+          if (type === 'session-1') {
+             if (session1Count >= 7) {
+                nextIndex = 2;
+                nextProgress = 1;
+             } else {
+                nextProgress = session1Count;
+             }
+          }
+
+          const newCompleted = [...state.completedSessions, { 
+            id: crypto.randomUUID(), 
+            date: today, 
+            type,
+            evaluation
+          }];
           
           // Update streak
           let newStreak = state.streak;
@@ -93,16 +112,15 @@ export const useAppStore = create<AppState>()(
           return {
             completedSessions: newCompleted,
             streak: newStreak,
-            lastActiveDate: today
+            lastActiveDate: today,
+            sessionProgress: nextProgress,
+            currentSessionIndex: nextIndex as 1 | 2
           };
         });
       },
 
-      updateSettings: (newSettings) => {
-        set((state) => ({
-          settings: { ...state.settings, ...newSettings }
-        }));
-      }
+      updateSettings: (newSettings) => 
+        set((state) => ({ settings: { ...state.settings, ...newSettings } }))
     }),
     {
       name: 'orokine-storage',

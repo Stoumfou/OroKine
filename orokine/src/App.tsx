@@ -84,12 +84,34 @@ function StatsTab() {
       </div>
 
       <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mt-4">
+        <h3 className="font-bold text-slate-800 mb-4">Évolution Douleur (EVA)</h3>
+        {completedSessions.length === 0 ? (
+          <p className="text-sm text-slate-400">Terminez des séances pour voir votre courbe.</p>
+        ) : (
+          <div className="flex items-end gap-2 h-32 mt-4 border-b border-slate-100 pb-2">
+            {completedSessions.slice(-10).map((s, i) => {
+              const pain = s.evaluation?.pain || 0;
+              const height = Math.max(5, (pain / 10) * 100);
+              return (
+                <div key={i} className="flex-1 flex flex-col items-center justify-end h-full">
+                  <div 
+                    className="w-full bg-sky-400 rounded-t-sm transition-all" 
+                    style={{ height: `${height}%`, opacity: pain === 0 ? 0.3 : 1 }}
+                  />
+                  <span className="text-[10px] text-slate-400 mt-2 font-bold">{pain}</span>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
+      <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mt-4">
         <h3 className="font-bold text-slate-800 mb-4">Historique Récent</h3>
         {awarenessHistory.length === 0 && completedSessions.length === 0 ? (
           <p className="text-sm text-slate-400">Aucune donnée pour le moment.</p>
         ) : (
           <ul className="space-y-4">
-            {/* Affichage des séances terminées */}
             {completedSessions.slice(-5).reverse().map((session, i) => (
               <li key={`sess-${i}`} className="flex justify-between items-center text-sm border-b border-slate-50 pb-3">
                 <div className="flex flex-col">
@@ -102,7 +124,6 @@ function StatsTab() {
               </li>
             ))}
             
-            {/* Affichage de la conscience de placement */}
             {awarenessHistory.slice(-5).reverse().map((record, i) => (
               <li key={`aw-${i}`} className="flex justify-between items-center text-sm border-b border-slate-50 pb-3">
                 <div className="flex flex-col">
@@ -116,14 +137,6 @@ function StatsTab() {
             ))}
           </ul>
         )}
-      </div>
-
-      <div className="bg-slate-900 rounded-3xl p-6 text-white mt-4">
-        <h3 className="font-bold mb-2">Exporter pour mon praticien</h3>
-        <p className="text-sm text-slate-400 mb-4">Générez un résumé de vos séances, vos douleurs (EVA) et votre observance pour votre prochain rendez-vous.</p>
-        <button className="w-full bg-white text-slate-900 py-3 rounded-xl font-bold hover:bg-slate-100 transition-colors">
-          Copier le bilan
-        </button>
       </div>
     </div>
   );
@@ -169,6 +182,32 @@ function SettingsTab() {
             className={`w-12 h-6 rounded-full transition-colors relative ${settings.soundEnabled ? 'bg-sky-500' : 'bg-slate-300'}`}
           >
             <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${settings.soundEnabled ? 'left-7' : 'left-1'}`} />
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-bold text-slate-800">Retour Haptique</h3>
+            <p className="text-xs text-slate-500">Vibrations du téléphone</p>
+          </div>
+          <button 
+            onClick={() => updateSettings({ vibrationEnabled: !settings.vibrationEnabled })}
+            className={`w-12 h-6 rounded-full transition-colors relative ${settings.vibrationEnabled ? 'bg-sky-500' : 'bg-slate-300'}`}
+          >
+            <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${settings.vibrationEnabled ? 'left-7' : 'left-1'}`} />
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-bold text-slate-800">Coach Vocal</h3>
+            <p className="text-xs text-slate-500">Annonce des exercices</p>
+          </div>
+          <button 
+            onClick={() => updateSettings({ voiceCoachEnabled: !settings.voiceCoachEnabled })}
+            className={`w-12 h-6 rounded-full transition-colors relative ${settings.voiceCoachEnabled ? 'bg-sky-500' : 'bg-slate-300'}`}
+          >
+            <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${settings.voiceCoachEnabled ? 'left-7' : 'left-1'}`} />
           </button>
         </div>
       </div>

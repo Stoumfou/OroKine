@@ -22,6 +22,8 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
   const [countdown, setCountdown] = useState(3);
   const [isPaused] = useState(false);
   const [showMirror, setShowMirror] = useState(false);
+  const [pain, setPain] = useState(0);
+  const [difficulty, setDifficulty] = useState(2);
   
   const { settings, completeSession } = useAppStore();
   
@@ -55,6 +57,11 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
   const transitionToExercise = (index: number) => {
     setCurrentSet(1);
     const ex = sessionData.exercises[index];
+    
+    if (settings.voiceCoachEnabled) {
+      audioEngine.speak(`${ex.title}.`);
+    }
+
     if (ex.type === 'timer') {
       setCountdown(3);
       setPlayerState('COUNTDOWN');
@@ -121,6 +128,12 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
     
     if (currentEx.sets && currentSet < currentEx.sets) {
        if (settings.soundEnabled) audioEngine.playStartBeep();
+       if (settings.vibrationEnabled) audioEngine.vibrate([100, 50, 100]);
+       
+       if (settings.voiceCoachEnabled) {
+         audioEngine.speak(`Repos de ${currentEx.pauseBetweenSets || 10} secondes. Série ${currentSet + 1} à suivre.`);
+       }
+
        setCurrentSet(prev => prev + 1);
        
        if (currentEx.pauseBetweenSets) {
@@ -138,6 +151,8 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
              } else {
                 setPlayerState('EXERCISE');
                 if (settings.soundEnabled) audioEngine.playStartBeep();
+                if (settings.vibrationEnabled) audioEngine.vibrate(200);
+                if (settings.voiceCoachEnabled) audioEngine.speak(`C'est reparti pour la série ${currentSet + 1}.`);
                 startExercise(currentEx);
              }
           }
@@ -154,6 +169,7 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
     if (rAFRef.current) cancelAnimationFrame(rAFRef.current);
     setPlayerState('EXERCISE');
     if (settings.soundEnabled) audioEngine.playStartBeep();
+    if (settings.vibrationEnabled) audioEngine.vibrate(200);
     startExercise(currentEx);
   };
 
@@ -161,6 +177,8 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
     if (rAFRef.current) cancelAnimationFrame(rAFRef.current);
     setShowMirror(false);
     
+    if (settings.vibrationEnabled) audioEngine.vibrate(100);
+
     if (currentExIndex < sessionData.exercises.length - 1) {
       const nextIdx = currentExIndex + 1;
       setCurrentExIndex(nextIdx);
@@ -168,7 +186,8 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
     } else {
       setPlayerState('FINISHED');
       if (settings.soundEnabled) audioEngine.playSuccessChord();
-      completeSession(sessionData.id);
+      if (settings.vibrationEnabled) audioEngine.vibrate([200, 100, 200, 100, 400]);
+      if (settings.voiceCoachEnabled) audioEngine.speak("Félicitations, la séance est terminée !");
     }
   };
 
@@ -236,9 +255,13 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
           <div>
             <label className="flex justify-between text-sm font-medium text-slate-700 mb-2">
               <span>Douleur (EVA)</span>
-              <span className="text-slate-400">0 - 10</span>
+              <span className="text-slate-400">{pain} / 10</span>
             </label>
-            <input type="range" min="0" max="10" defaultValue="0" className="w-full accent-sky-500" />
+            <input 
+              type="range" min="0" max="10" value={pain} 
+              onChange={e => setPain(Number(e.target.value))}
+              className="w-full accent-sky-500" 
+            />
             <div className="flex justify-between text-xs text-slate-400 mt-1">
               <span>Aucune</span>
               <span>Maximale</span>
@@ -248,9 +271,13 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
           <div>
             <label className="flex justify-between text-sm font-medium text-slate-700 mb-2">
               <span>Difficulté ressentie</span>
-              <span className="text-slate-400">0 - 10</span>
+              <span className="text-slate-400">{difficulty} / 10</span>
             </label>
-            <input type="range" min="0" max="10" defaultValue="2" className="w-full accent-sky-500" />
+            <input 
+              type="range" min="0" max="10" value={difficulty}
+              onChange={e => setDifficulty(Number(e.target.value))}
+              className="w-full accent-sky-500" 
+            />
             <div className="flex justify-between text-xs text-slate-400 mt-1">
               <span>Facile</span>
               <span>Impossible</span>
@@ -259,7 +286,10 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
         </div>
         
         <button 
-          onClick={onClose}
+          onClick={() => {
+             completeSession(sessionData.id, { pain, difficulty });
+             onClose();
+          }}
           className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 transition-all mt-auto mb-6"
         >
           Valider et Quitter

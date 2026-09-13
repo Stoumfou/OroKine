@@ -71,6 +71,23 @@ class AudioEngine {
       osc.stop(now + 2.0);
     });
   }
+
+  public vibrate(pattern: number | number[]) {
+    if ('vibrate' in navigator) {
+      navigator.vibrate(pattern);
+    }
+  }
+
+  public speak(text: string) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel(); // Stop any current speech
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'fr-FR';
+      utterance.rate = 1.0;
+      utterance.pitch = 1.1; // Slightly friendly
+      window.speechSynthesis.speak(utterance);
+    }
+  }
 }
 
 export const audioEngine = new AudioEngine();

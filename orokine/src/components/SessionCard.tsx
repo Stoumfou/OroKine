@@ -61,6 +61,21 @@ export function SessionCard({ sessionName, dayProgress, isCompletedToday, isLock
           </div>
         </div>
 
+        <div className="mb-6">
+          <div className="flex justify-between items-center text-sm font-bold text-slate-400 mb-2">
+            <span>Progression</span>
+            <span className={cappedProgress >= 7 ? 'text-emerald-500' : 'text-sky-500'}>
+              {Math.round((cappedProgress / 7) * 100)}%
+            </span>
+          </div>
+          <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+            <div 
+              className={`h-full rounded-full transition-all duration-500 ${cappedProgress >= 7 ? 'bg-emerald-500' : 'bg-sky-500'}`} 
+              style={{ width: `${(cappedProgress / 7) * 100}%` }} 
+            />
+          </div>
+        </div>
+
         <button 
           onClick={onStart}
           className={`w-full py-4 rounded-2xl flex items-center justify-center gap-2 font-bold transition-all ${
