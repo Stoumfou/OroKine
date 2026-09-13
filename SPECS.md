@@ -27,24 +27,31 @@ L'ergonomie s'inspire fortement de l'application "Bend" (design épuré, fond bl
 ## 4. Fonctionnalités Clés
 - **Accueil (HomeTab)** : 
   - Compteur de conscience quotidien.
-  - Liste des 7 séances (Cadenas sur les séances bloquées, compteur de validation `x/7`).
+  - Liste des 7 séances (Cadenas sur les séances bloquées, compteur de validation `x/7` et barre de progression `100%`).
 - **Lecteur de Séance (SessionPlayer)** :
   - Prévisualisation du matériel (verre d'eau, bâtonnet).
+  - Gestion avancée des **Séries (Sets)** avec écran bleu circulaire de **Repos** (Timer paramétrable) entre chaque série.
   - Navigation libre (boutons "Précédent" / "Passer").
-  - Timer circulaire ou compteur de répétitions par tap.
+  - Indicateur visuel "Objectif : X répétitions".
   - Bouton Miroir (Caméra).
+  - Évaluation de fin de séance (Douleur EVA et Difficulté).
+- **Réglages (SettingsTab)** :
+  - **Effets Sonores** (bips ADSR).
+  - **Retour Haptique** (vibrations via navigator.vibrate).
+  - **Coach Vocal** (synthèse vocale native offline Text-to-Speech pour annoncer les étapes).
 - **Bilan (StatsTab)** :
-  - Journal historique chronologique mixant les séances terminées (avec score EVA de difficulté) et les scores de "Conscience de placement" quotidiens.
+  - Graphique à barres (Évolution de la douleur EVA).
+  - Journal historique chronologique mixant les séances terminées et les scores de "Conscience de placement" quotidiens.
 
 ## 5. Contenu des Séances
 - **Séance 1 : Fondations (Implémentée)** 
-  1. Déglutition (Liquide - toboggan).
-  2. Déglutition (Bâtonnet).
-  3. Mobilité (Singe, dents, extérieur).
-  4a. Arrière de la langue (Prononciation GA).
-  4b. Placage respiratoire arrière langue.
-  5. Claquage (CLA-CLO).
-  6. Le Piston (Papille + résistance).
-  7. Étirement du frein (sur bâtonnet).
-  8. Détente musculaire (Masséters).
+  1a. Déglutition (Liquide - toboggan).
+  1b. Déglutition (Salive avec bâtonnet).
+  2. Mobilité (Singe, dents, extérieur).
+  3a. Mobilité arrière langue (GA avec doigt au menton).
+  3b. Placage respiratoire arrière langue (4x15s).
+  4. Claquage (CLA-CLO, avec consigne dents serrées).
+  5. Le Piston (Papille + résistance, 10x10s).
+  6. Étirement du frein (sur bâtonnet, 2x1min).
+  7a/b/c. Détente musculaire (Pressions, ponçage, points douloureux avec évolution dynamique).
 - **Séances 2 à 7** : À concevoir et implémenter.
