@@ -12,7 +12,19 @@ function HomeTab({ onStartSession }: { onStartSession: (index: number) => void }
   const todayStr = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
   const today = new Date().toISOString().split('T')[0];
 
-  const sessions = Array.from({ length: 7 }, (_, i) => i + 1);
+  const SESSIONS_CONFIG = [
+    { id: 1, name: 'Séance 1 : Fondations', reqId: null },
+    { id: 2, name: 'Séance 2 : Renforcement', reqId: 1 },
+    { id: 3, name: 'Séance 3 : Équilibre', reqId: 2 },
+    { id: 4, name: 'Séance 4 : Stabilisation', reqId: 3 },
+    { id: 5, name: 'Séance 5 : Mobilité', reqId: 4 },
+    { id: 6, name: 'Séance 6 : Puissance', reqId: 5 },
+    { id: 7, name: 'Séance 7 : Perfectionnement', reqId: 6 },
+    { id: 8, name: 'Séance 8 : Maîtrise', reqId: 7 },
+    { id: 9, name: 'Phonation', reqId: 8 },
+    { id: 10, name: 'Diction', reqId: 8 },
+    { id: 11, name: "Programme d'entretien", reqId: 8 },
+  ];
 
   return (
     <div className="p-6 pb-8 space-y-6">
@@ -32,14 +44,15 @@ function HomeTab({ onStartSession }: { onStartSession: (index: number) => void }
       
       <h3 className="font-bold text-slate-800 pt-2">Vos Séances</h3>
       <div className="space-y-4">
-        {sessions.map((sessionNum) => {
+        {SESSIONS_CONFIG.map((sessionConfig) => {
+          const sessionNum = sessionConfig.id;
           const sessionType = `session-${sessionNum}`;
           const timesCompleted = completedSessions.filter(s => s.type === sessionType).length;
           const isCompletedToday = completedSessions.some(s => s.type === sessionType && s.date === today);
           
           let isLocked = false;
-          if (sessionNum > 1) {
-            const prevSessionType = `session-${sessionNum - 1}`;
+          if (sessionConfig.reqId !== null) {
+            const prevSessionType = `session-${sessionConfig.reqId}`;
             const prevTimesCompleted = completedSessions.filter(s => s.type === prevSessionType).length;
             if (prevTimesCompleted < 7) {
               isLocked = true;
@@ -49,7 +62,7 @@ function HomeTab({ onStartSession }: { onStartSession: (index: number) => void }
           return (
             <SessionCard 
               key={sessionNum}
-              sessionName={`Séance n°${sessionNum}`} 
+              sessionName={sessionConfig.name} 
               dayProgress={timesCompleted} 
               isCompletedToday={isCompletedToday}
               isLocked={isLocked}

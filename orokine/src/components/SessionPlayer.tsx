@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { X, Check, Volume2, VolumeX, Camera } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
-import { SESSION_1, SESSION_2 } from '../data/sessions';
+import { SESSION_1, SESSION_2, SESSION_3, SESSION_4, SESSION_5, SESSION_6, SESSION_7, SESSION_8, SESSION_9, SESSION_10, SESSION_11 } from '../data/sessions';
 import type { Exercise } from '../data/sessions';
 import { audioEngine } from '../utils/audio';
 import { ExerciseIllustration } from './ExerciseIllustration';
@@ -15,6 +15,8 @@ interface Props {
   sessionIndex: number;
 }
 
+const SESSIONS = [SESSION_1, SESSION_2, SESSION_3, SESSION_4, SESSION_5, SESSION_6, SESSION_7, SESSION_8, SESSION_9, SESSION_10, SESSION_11];
+
 export function SessionPlayer({ onClose, sessionIndex }: Props) {
   const [playerState, setPlayerState] = useState<PlayerState>('PREP');
   const [currentExIndex, setCurrentExIndex] = useState(0);
@@ -27,8 +29,7 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
   
   const { settings, completeSession } = useAppStore();
   
-  // Fallback to SESSION_2 for sessions 3-7 since they are not populated yet
-  const sessionData = sessionIndex === 1 ? SESSION_1 : SESSION_2;
+  const sessionData = SESSIONS[sessionIndex - 1] || SESSION_1;
   const { width, height } = useWindowSize();
   
   // Timer state
