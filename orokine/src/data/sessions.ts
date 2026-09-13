@@ -27,8 +27,8 @@ export const SESSION_1: Session = {
   equipment: ['1 verre d\'eau', '1 bâtonnet (abaisse-langue ou cuillère)', '1 miroir'],
   exercises: [
     {
-      id: 's1-e1',
-      title: '1. Déglutition',
+      id: 's1-e1a',
+      title: '1a. Déglutition (Liquide)',
       category: 'Mouvement de toboggan',
       type: 'reps',
       reps: 10,
@@ -36,11 +36,23 @@ export const SESSION_1: Session = {
         'Le point de départ de la langue est au palais.',
         'Elle s\'aplatit contre le palais pour amener le liquide vers l\'arrière (mouvement de toboggan).',
         'Prenez de petites à moyennes gorgées (10 fois).',
-        'À faire devant un miroir : sans bouger les lèvres et sans que la langue ne touche les dents.',
-        'Ensuite, placez le bâtonnet entre les dents et avalez votre salive 5 fois de suite sans refermer les lèvres.'
+        'À faire devant un miroir : sans bouger les lèvres et sans que la langue ne touche les dents.'
       ],
       mirrorRecommended: true,
-      equipment: ['bâtonnet', 'verre d\'eau']
+      equipment: ['verre d\'eau']
+    },
+    {
+      id: 's1-e1b',
+      title: '1b. Déglutition (Salive)',
+      category: 'Mouvement de toboggan',
+      type: 'reps',
+      reps: 5,
+      instructions: [
+        'Placez le bâtonnet entre les dents.',
+        'Avalez votre salive 5 fois de suite sans refermer les lèvres.'
+      ],
+      mirrorRecommended: true,
+      equipment: ['bâtonnet']
     },
     {
       id: 's1-e3',
@@ -62,7 +74,7 @@ export const SESSION_1: Session = {
       type: 'reps',
       reps: 20,
       instructions: [
-        'Prononcez "GA" 20 fois, la bouche grande ouverte. Maintenez la mâchoire abaissée.'
+        'Prononcez "GA" 20 fois, la bouche grande ouverte. Maintenez la mâchoire abaissée immobile avec la main sur le menton.'
       ],
       mirrorRecommended: true,
     },

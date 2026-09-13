@@ -23,7 +23,14 @@ export interface AppState {
   updateSettings: (settings: Partial<AppState['settings']>) => void;
 }
 
-const getTodayString = () => new Date().toISOString().split('T')[0];
+const formatDateLocal = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+const getTodayString = () => formatDateLocal(new Date());
 
 export const useAppStore = create<AppState>()(
   persist(
@@ -54,7 +61,7 @@ export const useAppStore = create<AppState>()(
         if (state.awarenessDate !== today) {
           const yesterday = new Date();
           yesterday.setDate(yesterday.getDate() - 1);
-          const yesterdayString = yesterday.toISOString().split('T')[0];
+          const yesterdayString = formatDateLocal(yesterday);
           
           let newStreak = state.streak;
           if (state.lastActiveDate === yesterdayString) {

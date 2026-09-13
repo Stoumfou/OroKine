@@ -18,14 +18,14 @@ export function Layout({ children }: LayoutProps) {
   ];
 
   return (
-    <div className="flex flex-col h-screen max-w-md mx-auto bg-slate-50 relative overflow-hidden shadow-2xl">
+    <div className="flex flex-col h-[100dvh] max-w-md mx-auto bg-slate-50 relative overflow-hidden shadow-2xl">
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className="flex-1 overflow-y-auto">
         {children(currentTab)}
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="absolute bottom-0 w-full bg-white border-t border-slate-200 px-6 py-3 pb-safe">
+      <nav className="w-full bg-white border-t border-slate-200 px-6 py-3 pb-safe z-50 flex-shrink-0">
         <div className="flex justify-between items-center">
           {navItems.map((item) => (
             <button

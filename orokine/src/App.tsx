@@ -4,6 +4,8 @@ import { AwarenessCounter } from './components/AwarenessCounter';
 import { SessionCard } from './components/SessionCard';
 import { useAppStore } from './store/useAppStore';
 
+import { InstallBanner } from './components/InstallBanner';
+
 function HomeTab({ onStartSession }: { onStartSession: (index: number) => void }) {
   const { streak, completedSessions } = useAppStore();
   
@@ -23,6 +25,8 @@ function HomeTab({ onStartSession }: { onStartSession: (index: number) => void }
           🔥 {streak} {streak > 1 ? 'jours' : 'jour'}
         </div>
       </header>
+      
+      <InstallBanner />
       
       <AwarenessCounter />
       

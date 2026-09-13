@@ -303,7 +303,7 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
   // EXERCISE STATE
   return (
     <div className="flex-1 flex flex-col h-[100dvh] bg-slate-50">
-      <header className="flex justify-between items-center p-6 pt-safe">
+      <header className="flex justify-between items-center px-6 py-4 pt-safe">
         <button onClick={onClose} className="p-2 bg-white rounded-full shadow-sm">
           <X className="w-5 h-5 text-slate-500" />
         </button>
@@ -315,7 +315,7 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
         </button>
       </header>
       
-      <main className="flex-1 flex flex-col items-center p-6 text-center">
+      <main className="flex-1 flex flex-col items-center px-6 pb-6 pt-2 text-center">
         <h2 className="text-2xl font-bold text-slate-800 mb-1">{currentEx.title}</h2>
         <div className="flex flex-col items-center gap-1 mb-4">
           <div className="flex items-center gap-2">

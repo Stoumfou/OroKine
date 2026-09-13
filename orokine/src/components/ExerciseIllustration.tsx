@@ -59,10 +59,18 @@ export function ExerciseIllustration({ exerciseId }: Props) {
 
   // Lèvres de profil très réalistes (lèvre sup, ouverture, lèvre inf)
   const ProfileLips = () => (
-    <path 
-      d="M 10 25 C 25 30, 30 38, 22 45 C 32 50, 25 60, 10 65" 
-      fill="none" stroke={lipColor} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" 
-    />
+    <g>
+      {/* Lèvre supérieure */}
+      <path 
+        d="M 10 25 C 25 30, 30 38, 22 45 L 14 43 C 12 38, 10 32, 10 25 Z" 
+        fill="#fa5252" 
+      />
+      {/* Lèvre inférieure */}
+      <path 
+        d="M 22 45 C 32 50, 25 60, 10 65 L 12 58 C 15 52, 20 48, 22 45 Z" 
+        fill="#ff7675" 
+      />
+    </g>
   );
 
   // Dent réaliste (incisive de profil)
@@ -73,8 +81,8 @@ export function ExerciseIllustration({ exerciseId }: Props) {
     />
   );
 
-  // 1. Déglutition (Toboggan / Bâtonnet) - Statique et clair
-  if (exerciseId === 's1-e1' || exerciseId === 's1-e2') {
+  // 1a/1b. Déglutition (Toboggan / Bâtonnet) - Statique et clair
+  if (exerciseId === 's1-e1a' || exerciseId === 's1-e1b') {
     return (
       <svg viewBox="0 0 100 100" className="w-full h-full p-4 drop-shadow-sm">
         <ProfileLips />
@@ -88,14 +96,14 @@ export function ExerciseIllustration({ exerciseId }: Props) {
           fill={tongueColor} 
         />
         
-        {exerciseId === 's1-e2' && (
+        {exerciseId === 's1-e1b' && (
           <rect x="0" y="48" width="40" height="4" fill="#a1a1aa" transform="rotate(-10 23 48)" />
         )}
       </svg>
     );
   }
 
-  // 3. Mobilité (Singe, Dents, Extérieur) - Boule rouge fait toute la séquence
+  // 2. Mobilité (Singe, Dents, Extérieur) - Boule rouge fait toute la séquence
   if (exerciseId === 's1-e3') {
     return (
       <svg viewBox="0 0 100 100" className="w-full h-full p-4 drop-shadow-sm">
@@ -141,8 +149,8 @@ export function ExerciseIllustration({ exerciseId }: Props) {
     );
   }
 
-  // 4a. Prononcer GA (Juste le texte)
-  if (exerciseId === 's1-e4a') {
+  // 3a. Prononcer GA (Juste le texte)
+  if (exerciseId === 's1-e3a') {
     return (
       <svg viewBox="0 0 100 100" className="w-full h-full p-4 drop-shadow-sm">
         <style>{animationStyles}</style>
@@ -151,8 +159,8 @@ export function ExerciseIllustration({ exerciseId }: Props) {
     );
   }
 
-  // 4b. Placage arrière langue
-  if (exerciseId === 's1-e4b') {
+  // 3b. Placage arrière langue
+  if (exerciseId === 's1-e3b') {
     return (
       <svg viewBox="0 0 100 100" className="w-full h-full p-4 drop-shadow-sm">
         <style>{animationStyles}</style>
@@ -168,7 +176,7 @@ export function ExerciseIllustration({ exerciseId }: Props) {
     );
   }
 
-  // 5. Claquage
+  // 4. Claquage
   if (exerciseId === 's1-e5') {
     return (
       <svg viewBox="0 0 100 100" className="w-full h-full p-4 drop-shadow-sm">
@@ -184,7 +192,7 @@ export function ExerciseIllustration({ exerciseId }: Props) {
     );
   }
 
-  // 6. Le Piston (Poussée forte papille)
+  // 5. Le Piston (Poussée forte papille)
   if (exerciseId === 's1-e6') {
     return (
       <svg viewBox="0 0 100 100" className="w-full h-full p-4 drop-shadow-sm">
@@ -206,7 +214,7 @@ export function ExerciseIllustration({ exerciseId }: Props) {
     );
   }
 
-  // 7. Étirement du frein
+  // 6. Étirement du frein
   if (exerciseId === 's1-e7') {
     return (
       <svg viewBox="0 0 100 100" className="w-full h-full p-4 drop-shadow-sm">
@@ -225,8 +233,8 @@ export function ExerciseIllustration({ exerciseId }: Props) {
     );
   }
 
-  // 8. Détente musculaire
-  if (exerciseId === 's1-e8') {
+  // 7a, 7b, 7c. Détente musculaire
+  if (exerciseId.startsWith('s1-e8')) {
     return (
       <svg viewBox="0 0 100 100" className="w-full h-full p-4 drop-shadow-sm">
         <style>{animationStyles}</style>
