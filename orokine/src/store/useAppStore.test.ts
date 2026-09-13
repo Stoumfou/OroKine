@@ -14,7 +14,6 @@ describe('useAppStore', () => {
   });
 
   it('should unlock session 2 after 7 completions of session 1', () => {
-    const store = useAppStore.getState();
     
     for (let i = 0; i < 7; i++) {
       useAppStore.getState().completeSession('session-1');

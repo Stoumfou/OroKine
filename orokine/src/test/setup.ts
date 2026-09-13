@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 
-global.matchMedia = vi.fn().mockImplementation(query => ({
+globalThis.matchMedia = vi.fn().mockImplementation(query => ({
   matches: false,
   media: query,
   onchange: null,
@@ -20,12 +20,12 @@ class MockAudioContext {
   createOscillator() { return { connect: vi.fn(), start: vi.fn(), stop: vi.fn(), frequency: { setValueAtTime: vi.fn(), value: 0 }, type: 'sine' }; }
   async resume() {}
 }
-global.AudioContext = MockAudioContext as any;
+globalThis.AudioContext = MockAudioContext as any;
 
-global.window.speechSynthesis = {
+globalThis.window.speechSynthesis = {
   speak: vi.fn(),
   cancel: vi.fn(),
   getVoices: vi.fn().mockReturnValue([])
 } as any;
 
-global.SpeechSynthesisUtterance = vi.fn() as any;
+globalThis.SpeechSynthesisUtterance = vi.fn() as any;

@@ -3,22 +3,25 @@ export type ExerciseType = 'timer' | 'reps';
 export interface Exercise {
   id: string;
   title: string;
-  category: string;
-  type: ExerciseType;
-  duration?: number; // total duration in seconds if timer
-  reps?: number; // total reps if reps
-  sets?: number; // number of sets
-  pauseBetweenSets?: number; // seconds
-  instructions: string[];
+  category?: string;
+  type?: string;
+  duration?: number;
+  reps?: number;
+  sets?: number;
+  pauseBetweenSets?: number;
+  instructions?: string[];
+  description?: string;
   equipment?: string[];
   mirrorRecommended?: boolean;
+  timerOptions?: { label: string; duration?: number; sets?: number }[];
 }
 
 export interface Session {
   id: string;
   title: string;
+  description?: string;
   exercises: Exercise[];
-  equipment: string[];
+  equipment?: string[];
 }
 
 export const SESSION_1: Session = {

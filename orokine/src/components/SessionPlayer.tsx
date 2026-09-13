@@ -208,14 +208,17 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
               <Check className="w-5 h-5 text-emerald-500" />
               Matériel requis
             </h3>
-            <ul className="space-y-3">
-              {sessionData.equipment.map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-slate-600">
-                  <div className="w-2 h-2 rounded-full bg-slate-200" />
+            {sessionData.equipment && sessionData.equipment.length > 0 ? (
+              sessionData.equipment.map((item, i) => (
+                <div key={i} className="bg-slate-100 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium border border-slate-200">
                   {item}
-                </li>
-              ))}
-            </ul>
+                </div>
+              ))
+            ) : (
+              <div className="bg-slate-50 text-slate-500 px-4 py-2 rounded-xl text-sm font-medium border border-slate-100">
+                Aucun matériel requis
+              </div>
+            )}
           </div>
           
           <button 
@@ -404,16 +407,21 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
 
         <div className="bg-white p-6 rounded-3xl w-full shadow-sm border border-slate-100 flex-1 flex flex-col">
           <h3 className="font-bold text-slate-800 mb-4 text-left">Consignes</h3>
-          <ul className="space-y-3 text-left">
-            {currentEx.instructions.map((inst, i) => (
-              <li key={i} className="flex gap-3 text-slate-600 text-sm">
-                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center shrink-0 font-bold text-[10px]">
-                  {i + 1}
-                </span>
-                {inst}
-              </li>
-            ))}
-          </ul>
+          {currentEx.description && (
+            <p className="text-slate-600 text-sm text-left mb-4 whitespace-pre-line">{currentEx.description}</p>
+          )}
+          {currentEx.instructions && (
+            <ul className="space-y-3 text-left">
+              {currentEx.instructions.map((inst, i) => (
+                <li key={i} className="flex gap-3 text-slate-600 text-sm">
+                  <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center shrink-0 font-bold text-[10px]">
+                    {i + 1}
+                  </span>
+                  {inst}
+                </li>
+              ))}
+            </ul>
+          )}
           
           <div className="mt-auto pt-6 flex gap-4">
             <button 
