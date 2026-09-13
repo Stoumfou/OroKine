@@ -317,12 +317,19 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
       
       <main className="flex-1 flex flex-col items-center p-6 text-center">
         <h2 className="text-2xl font-bold text-slate-800 mb-1">{currentEx.title}</h2>
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-sky-500 font-medium text-sm">{currentEx.category}</span>
-          {currentEx.sets && (
-            <span className="bg-slate-200 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-md">
-              Série {currentSet}/{currentEx.sets}
-            </span>
+        <div className="flex flex-col items-center gap-1 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sky-500 font-medium text-sm text-balance leading-tight">{currentEx.category}</span>
+            {currentEx.sets && (
+              <span className="bg-slate-200 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-md shrink-0">
+                Série {currentSet}/{currentEx.sets}
+              </span>
+            )}
+          </div>
+          {currentEx.type === 'reps' && currentEx.reps && (
+            <div className="bg-sky-100 text-sky-700 font-bold px-4 py-1.5 rounded-full text-sm mt-1 shadow-sm border border-sky-200">
+              Objectif : {currentEx.reps} répétitions
+            </div>
           )}
         </div>
         

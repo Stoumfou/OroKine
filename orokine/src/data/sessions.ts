@@ -56,16 +56,26 @@ export const SESSION_1: Session = {
       mirrorRecommended: true,
     },
     {
-      id: 's1-e4a',
-      title: '3. Mobilité et Placage',
+      id: 's1-e3a',
+      title: '3a. Mobilité arrière langue',
+      category: 'Arrière de la langue',
+      type: 'reps',
+      reps: 20,
+      instructions: [
+        'Prononcez "GA" 20 fois, la bouche grande ouverte. Maintenez la mâchoire abaissée.'
+      ],
+      mirrorRecommended: true,
+    },
+    {
+      id: 's1-e3b',
+      title: '3b. Placage arrière langue',
       category: 'Arrière de la langue',
       type: 'timer',
       duration: 15,
       sets: 4,
       pauseBetweenSets: 5,
       instructions: [
-        'Prononcez "GA" 20 fois, la bouche grande ouverte. Maintenez la mâchoire abaissée.',
-        'Puis, maintenez l\'arrière de la langue collée au palais.',
+        'Maintenez l\'arrière de la langue collée au palais.',
         'Respirez exclusivement par le nez.',
         'Gardez cette position 15 secondes, à faire 4 fois.'
       ],
@@ -74,7 +84,7 @@ export const SESSION_1: Session = {
     {
       id: 's1-e5',
       title: '4. Claquage',
-      category: 'Phonation',
+      category: 'Mouvement d\'enroulement en partant du palais vers l\'arrière',
       type: 'reps',
       reps: 60,
       instructions: [
@@ -82,7 +92,7 @@ export const SESSION_1: Session = {
         'CLO 20 fois',
         'CLA-CLO 20 fois',
         'Dès que possible, passer au double claquage : son "CLAC-CLA-CLO-CLO" x 20.',
-        '(Si exercice difficile, serrez les dents et répétez "CLA CLA CLA")'
+        'Si difficile, à effectuer dents serrées avec la volonté que la langue tape en bas.'
       ],
     },
     {
@@ -124,7 +134,7 @@ export const SESSION_1: Session = {
       reps: 10,
       instructions: [
         'Massez les muscles masséters (muscles des joues/mâchoire).',
-        'Faites des pressions glissées (10 fois).'
+        'Pressions-glissées 10 fois bilatérales de haut en bas (en commençant avec les paumes jusqu\'aux doigts).'
       ],
     },
     {
@@ -148,7 +158,8 @@ export const SESSION_1: Session = {
       duration: 30,
       instructions: [
         'Cherchez les points particulièrement douloureux.',
-        'Maintenez une pression ferme de 30 secondes sur ces points.'
+        'Maintenez une pression ferme de 30 secondes sur ces points.',
+        'Evolution du massage en position d\'ouverture statique de la mâchoire pour un meilleur étirement puis en ouverture dynamique.'
       ],
     }
   ]
