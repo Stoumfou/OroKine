@@ -19,8 +19,28 @@ const SESSIONS = [SESSION_1, SESSION_2, SESSION_3, SESSION_4, SESSION_5, SESSION
 
 export function SessionPlayer({ onClose, sessionIndex }: Props) {
   const [playerState, setPlayerState] = useState<PlayerState>('PREP');
-  const [currentExIndex, setCurrentExIndex] = useState(0);
-  const [currentSet, setCurrentSet] = useState(1);
+  const [currentExIndex, _setCurrentExIndex] = useState(0);
+  const currentExIndexRef = useRef(0);
+  const setCurrentExIndex = (val: number) => {
+    currentExIndexRef.current = val;
+    _setCurrentExIndex(val);
+  };
+
+  const [currentSet, _setCurrentSet] = useState(1);
+  const currentSetRef = useRef(1);
+  const setCurrentSet = (val: number | ((prev: number) => number)) => {
+    if (typeof val === 'function') {
+      _setCurrentSet(prev => {
+        const next = val(prev);
+        currentSetRef.current = next;
+        return next;
+      });
+    } else {
+      currentSetRef.current = val;
+      _setCurrentSet(val);
+    }
+  };
+
   const [countdown, setCountdown] = useState(3);
   const [isPaused] = useState(false);
   const [showMirror, setShowMirror] = useState(false);
@@ -38,6 +58,9 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
   const rAFRef = useRef<number | undefined>(undefined);
 
   const currentEx = sessionData.exercises[currentExIndex];
+  const currentExRef = useRef(currentEx);
+  currentExRef.current = currentEx; // always up to date
+
 
   useEffect(() => {
     // WakeLock
@@ -127,19 +150,20 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
   const finishCurrentSetOrExercise = () => {
     if (rAFRef.current) cancelAnimationFrame(rAFRef.current);
     
-    if (currentEx.sets && currentSet < currentEx.sets) {
+    const ex = currentExRef.current;
+    if (ex.sets && currentSetRef.current < ex.sets) {
        if (settings.soundEnabled) audioEngine.playStartBeep();
        if (settings.vibrationEnabled) audioEngine.vibrate([100, 50, 100]);
        
        if (settings.voiceCoachEnabled) {
-         audioEngine.speak(`Repos de ${currentEx.pauseBetweenSets || 10} secondes. Série ${currentSet + 1} à suivre.`);
+         audioEngine.speak(`Repos de ${ex.pauseBetweenSets || 10} secondes. Série ${currentSetRef.current + 1} à suivre.`);
        }
 
        setCurrentSet(prev => prev + 1);
        
-       if (currentEx.pauseBetweenSets) {
+       if (ex.pauseBetweenSets) {
           setPlayerState('REST');
-          const durationMs = currentEx.pauseBetweenSets * 1000;
+          const durationMs = ex.pauseBetweenSets * 1000;
           setTimeLeft(durationMs);
           endTimeRef.current = Date.now() + durationMs;
           
@@ -153,13 +177,13 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
                 setPlayerState('EXERCISE');
                 if (settings.soundEnabled) audioEngine.playStartBeep();
                 if (settings.vibrationEnabled) audioEngine.vibrate(200);
-                if (settings.voiceCoachEnabled) audioEngine.speak(`C'est reparti pour la série ${currentSet + 1}.`);
-                startExercise(currentEx);
+                if (settings.voiceCoachEnabled) audioEngine.speak(`C'est reparti pour la série ${currentSetRef.current}.`);
+                startExercise(currentExRef.current);
              }
           }
           rAFRef.current = requestAnimationFrame(updateRest);
        } else {
-          startExercise(currentEx);
+          startExercise(ex);
        }
     } else {
        handleNext();
@@ -171,7 +195,7 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
     setPlayerState('EXERCISE');
     if (settings.soundEnabled) audioEngine.playStartBeep();
     if (settings.vibrationEnabled) audioEngine.vibrate(200);
-    startExercise(currentEx);
+    startExercise(currentExRef.current);
   };
 
   const handleNext = () => {
@@ -180,8 +204,8 @@ export function SessionPlayer({ onClose, sessionIndex }: Props) {
     
     if (settings.vibrationEnabled) audioEngine.vibrate(100);
 
-    if (currentExIndex < sessionData.exercises.length - 1) {
-      const nextIdx = currentExIndex + 1;
+    if (currentExIndexRef.current < sessionData.exercises.length - 1) {
+      const nextIdx = currentExIndexRef.current + 1;
       setCurrentExIndex(nextIdx);
       transitionToExercise(nextIdx);
     } else {
